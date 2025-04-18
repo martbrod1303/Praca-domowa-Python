@@ -1,0 +1,65 @@
+import random
+import matplotlib.pyplot as plt
+
+class EnergyInputHandler:
+    @staticmethod
+    def get_valid_energy_reading():
+        while True:
+            try:
+                energy_reading = float(input("Podaj odczyt zużycia energii: "))
+                if energy_reading >= 0:
+                    return energy_reading
+                else:
+                    raise ValueError("Odczyt zużycia energii nie może być ujemny.")
+            except ValueError as e:
+                print(f"Błąd: {e}")
+
+class EnergyDataProcessor:
+    def __init__(self):
+        self.energy_readings = []
+
+    def add_energy_reading(self, energy_reading):
+        self.energy_readings.append(energy_reading)
+
+    def calculate_average_energy(self):
+        if not self.energy_readings:
+            return 0.0
+        return sum(self.energy_readings) / len(self.energy_readings)
+
+    def display_energy_data(self):
+        print("Odczyty zużycia energii:", self.energy_readings)
+        print("Średnie zużycie energii:", self.calculate_average_energy())
+
+    def get_energy_readings(self):
+        return self.energy_readings
+
+    def set_energy_readings(self, energy_readings):
+        self.energy_readings = energy_readings
+
+class EnergyUsageVisualizer:
+    @staticmethod
+    def plot_energy_readings(energy_readings):
+        plt.plot(energy_readings, marker='o')
+        plt.xlabel('Numer odczytu')
+        plt.ylabel('Zużycie energii')
+        plt.title('Wykres zużycia energii')
+        plt.show()
+
+# Utworzenie obiektów
+energy_input_handler = EnergyInputHandler()
+energy_data_processor = EnergyDataProcessor()
+energy_visualizer = EnergyUsageVisualizer()
+
+# Symulacja odczytów zużycia energii
+for i in range(5):  # Pobieramy pięć odczytów
+    energy_reading = energy_input_handler.get_valid_energy_reading()
+    energy_data_processor.add_energy_reading(energy_reading)
+
+# Przetwarzanie i wyświetlanie danych
+energy_data_processor.display_energy_data()
+
+# Przygotowanie danych do wykresu
+energy_readings_for_plot = energy_data_processor.get_energy_readings()
+
+# Wygenerowanie wykresu
+energy_visualizer.plot_energy_readings(energy_readings_for_plot)
